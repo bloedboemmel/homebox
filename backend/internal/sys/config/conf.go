@@ -38,6 +38,7 @@ type Options struct {
 	CurrencyConfig       string `yaml:"currencies"`
 	GithubReleaseCheck   bool   `yaml:"check_github_release"    conf:"default:true"`
 	AllowAnalytics       bool   `yaml:"allow_analytics"         conf:"default:false"`
+	FoundItemEmail       string `yaml:"found_item_email"        conf:"default:"`
 }
 
 type Thumbnail struct {

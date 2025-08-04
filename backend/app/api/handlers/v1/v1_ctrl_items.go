@@ -188,6 +188,37 @@ func (ctrl *V1Controller) HandleItemGet() errchain.HandlerFunc {
 	return adapters.CommandID("id", fn, http.StatusOK)
 }
 
+type PublicItemResponse struct {
+	Name  string `json:"name"`
+	Email string `json:"email"`
+}
+
+// HandleItemPublicInfo godocs
+//
+//	@Summary	Get Public Item Info
+//	@Tags		Items
+//	@Produce	json
+//	@Param		id	path		string	true	"Item ID"
+//	@Success	200	{object}	PublicItemResponse
+//	@Router		/v1/items/{id}/public [GET]
+func (ctrl *V1Controller) HandleItemPublicInfo() errchain.HandlerFunc {
+	fn := func(r *http.Request, ID uuid.UUID) (PublicItemResponse, error) {
+		// Get item without authentication - but we need to get it somehow
+		// We'll use a background context to get the item across all groups
+		item, err := ctrl.repo.Items.GetPublicItemInfo(r.Context(), ID)
+		if err != nil {
+			return PublicItemResponse{}, err
+		}
+
+		return PublicItemResponse{
+			Name:  item.Name,
+			Email: ctrl.config.Options.FoundItemEmail,
+		}, nil
+	}
+
+	return adapters.CommandID("id", fn, http.StatusOK)
+}
+
 // HandleItemDelete godocs
 //
 //	@Summary	Delete Item

@@ -5,7 +5,16 @@ export default defineNuxtRouteMiddleware(async () => {
 
   if (!ctx.isAuthorized()) {
     if (window.location.pathname !== "/") {
-      console.debug("[middleware/auth] isAuthorized returned false, redirecting to /");
+      console.debug("[middleware/auth] isAuthorized returned false, redirecting");
+      
+      // Check if this is an item page access - redirect to "found" page instead of login
+      const itemMatch = window.location.pathname.match(/^\/item\/([^\/]+)$/);
+      if (itemMatch) {
+        const itemId = itemMatch[1];
+        console.debug("[middleware/auth] item page access detected, redirecting to found page");
+        return navigateTo(`/item/${itemId}/found`);
+      }
+      
       redirectTo.value = window.location.pathname;
       return navigateTo("/");
     }
@@ -16,7 +25,16 @@ export default defineNuxtRouteMiddleware(async () => {
     const { data, error } = await api.user.self();
     if (error) {
       if (window.location.pathname !== "/") {
-        console.debug("[middleware/user] user is null and fetch failed, redirecting to /");
+        console.debug("[middleware/user] user is null and fetch failed, redirecting");
+        
+        // Check if this is an item page access - redirect to "found" page instead of login
+        const itemMatch = window.location.pathname.match(/^\/item\/([^\/]+)$/);
+        if (itemMatch) {
+          const itemId = itemMatch[1];
+          console.debug("[middleware/user] item page access detected, redirecting to found page");
+          return navigateTo(`/item/${itemId}/found`);
+        }
+        
         redirectTo.value = window.location.pathname;
         return navigateTo("/");
       }
