@@ -1070,6 +1070,34 @@ const docTemplate = `{
                 }
             }
         },
+        "/v1/items/{id}/public": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Items"
+                ],
+                "summary": "Get Public Item Info",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Item ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/v1.PublicItemResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/v1/labelmaker/assets/{id}": {
             "get": {
                 "security": [
@@ -4271,6 +4299,17 @@ const docTemplate = `{
                 "username": {
                     "type": "string",
                     "example": "admin@admin.com"
+                }
+            }
+        },
+        "v1.PublicItemResponse": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
                 }
             }
         },

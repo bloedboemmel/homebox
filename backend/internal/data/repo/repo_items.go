@@ -342,6 +342,23 @@ func (e *ItemsRepository) GetOneByGroup(ctx context.Context, gid, id uuid.UUID) 
 	return e.getOne(ctx, item.ID(id), item.HasGroupWith(group.ID(gid)))
 }
 
+type PublicItemInfo struct {
+	Name string `json:"name"`
+}
+
+// GetPublicItemInfo returns basic public information about an item (just the name)
+// This method does not check group ownership for public access to found items
+func (e *ItemsRepository) GetPublicItemInfo(ctx context.Context, id uuid.UUID) (PublicItemInfo, error) {
+	item, err := e.db.Item.Query().Where(item.ID(id)).Only(ctx)
+	if err != nil {
+		return PublicItemInfo{}, err
+	}
+
+	return PublicItemInfo{
+		Name: item.Name,
+	}, nil
+}
+
 // QueryByGroup returns a list of items that belong to a specific group based on the provided query.
 func (e *ItemsRepository) QueryByGroup(ctx context.Context, gid uuid.UUID, q ItemQuery) (PaginationResult[ItemSummary], error) {
 	qb := e.db.Item.Query().Where(

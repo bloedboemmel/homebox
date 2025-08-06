@@ -454,10 +454,6 @@ export interface EntUserEdges {
 export interface BarcodeProduct {
   barcode: string;
   imageBase64: string;
-  /**
-   * TODO: add image attachement
-   * TODO: add asin?
-   */
   imageURL: string;
   item: ItemCreate;
   manufacturer: string;
@@ -900,6 +896,11 @@ export interface LoginForm {
   stayLoggedIn: boolean;
   /** @example "admin@admin.com" */
   username: string;
+}
+
+export interface PublicItemResponse {
+  email: string;
+  name: string;
 }
 
 export interface TokenResponse {

@@ -1,5 +1,5 @@
 import { BaseAPI, route } from "./base";
-import type { APISummary, LoginForm, TokenResponse, UserRegistration } from "./types/data-contracts";
+import type { APISummary, LoginForm, TokenResponse, UserRegistration, PublicItemResponse } from "./types/data-contracts";
 
 export type StatusResult = {
   health: boolean;
@@ -26,5 +26,9 @@ export class PublicApi extends BaseAPI {
 
   public register(body: UserRegistration) {
     return this.http.post<UserRegistration, TokenResponse>({ url: route("/users/register"), body });
+  }
+
+  public getPublicItemInfo(id: string) {
+    return this.http.get<PublicItemResponse>({ url: route(`/items/${id}/public`) });
   }
 }

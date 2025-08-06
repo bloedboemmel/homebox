@@ -68,6 +68,9 @@ func (a *app) mountRoutes(r *chi.Mux, chain *errchain.ErrChain, repos *repo.AllR
 
 		r.Get("/currencies", chain.ToHandlerFunc(v1Ctrl.HandleCurrency()))
 
+		// Public item info for "found item" feature
+		r.Get("/items/{id}/public", chain.ToHandlerFunc(v1Ctrl.HandleItemPublicInfo()))
+
 		providers := []v1.AuthProvider{
 			providers.NewLocalProvider(a.services.User),
 		}
